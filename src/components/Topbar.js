@@ -21,10 +21,10 @@ export default function Navbar() {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">Sign in</a>
+                            <a className="nav-link active" aria-current="page" href="/signin">Sign in</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">Sign up</a>
+                            <a className="nav-link active" aria-current="page" href="/signup">Sign up</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link active" aria-current="page" href="#">Suggestions</a>

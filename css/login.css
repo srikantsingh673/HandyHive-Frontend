@@ -1,0 +1,24 @@
+div.Login form {
+    width: 90%;
+    margin-top: 169px;
+    margin-left: 30%;
+    height: 100vh;
+    margin-right: 30%;
+    /* display: flex; */
+}
+
+
+div.smedia{
+    display: flex;
+    column-gap: 24px;
+}
+  
+
+@media only screen and (max-width:620px ) {
+    div.Login form {
+        width: 95%;
+        margin-top: 130px;
+        margin-left: 3%;
+        height: 100vh;
+    } }
+
