@@ -1,8 +1,13 @@
 'use client';
+
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
+
+/*
+Component to display the top navbar
+*/
 export default function Navbar() {
     useEffect(() => {
         require('bootstrap/dist/js/bootstrap.bundle.min.js');

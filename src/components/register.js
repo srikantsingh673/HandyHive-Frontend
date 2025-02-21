@@ -1,17 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { getIndiaState } from "india-state-district";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import "../../css/singup.css";
 import axios from "axios";
-import { getIndiaState } from "india-state-district";
 
+/*
+Component to handle user registration
+*/
 export default function SignupForm() {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
+    password: "",
     mobile: "",
     age: "",
     gender: "",
@@ -19,18 +24,33 @@ export default function SignupForm() {
     district: "",
     state: "",
     pincode: "",
-    trades: "",
+    trades: [],
     rate_per_day: "",
   });
 
   const [errors, setErrors] = useState({});
   const [states, setStates] = useState([]);
+  const [tradesList, setTradesList] = useState([]);
 
   useEffect(() => {
     // Fetch all Indian states when component mounts
     const fetchedStates = getIndiaState().sort((a, b) => a.state.localeCompare(b.state));
     setStates(fetchedStates);
+
+    // Fetch available trades
+    fetchTrades();
+
   }, []);
+
+
+  const fetchTrades = async () => {
+    try {
+      const response = await axios.get(`${process.env.API_BASE_URL}/account/trades`);
+      setTradesList(response.data); // Store trades from API
+    } catch (error) {
+      console.error("Error fetching trades:", error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +58,16 @@ export default function SignupForm() {
 
     // Validate in real-time
     validateField(name, value);
+  };
+
+  const handleTradeChange = (tradeId, isChecked) => {
+    setFormData((prevFormData) => {
+      const updatedTrades = isChecked
+        ? [...prevFormData.trades, tradeId] // Add trade if checked
+        : prevFormData.trades.filter((id) => id !== tradeId); // Remove if unchecked
+  
+      return { ...prevFormData, trades: updatedTrades };
+    });
   };
 
   const validateField = (name, value) => {
@@ -100,9 +130,10 @@ export default function SignupForm() {
     setErrors(newErrors);
   };
 
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Final validation before submitting
     let validationErrors = {};
     Object.keys(formData).forEach((field) => {
@@ -111,7 +142,7 @@ export default function SignupForm() {
         validationErrors[field] = errors[field];
       }
     });
-  
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -122,13 +153,14 @@ export default function SignupForm() {
           "Content-Type": "application/json",
         },
       });
-       if(res.status==200){
+      if (res.status == 200) {
         console.log("success")
-       }
+        router.push("/");
+      }
     } catch (error) {
       console.error(error);
     }
-   
+
     console.log("Form Submitted", formData);
   };
 
@@ -143,13 +175,17 @@ export default function SignupForm() {
               {errors.first_name && <small className="text-danger">{errors.first_name}</small>}
             </div>
             <div className="col-md-6">
-              <input type="text" name="last_name" placeholder="Last Name" className="form-control" onChange={handleChange} required />
+              <input type="text" name="last_name" placeholder="Last Name" className="form-control" onChange={handleChange} />
               {errors.last_name && <small className="text-danger">{errors.last_name}</small>}
             </div>
           </div>
           <div className="mt-3">
             <input type="email" name="email" placeholder="Email" className="form-control" onChange={handleChange} required />
             {errors.email && <small className="text-danger">{errors.email}</small>}
+          </div>
+          <div className="mt-3">
+            <input type="password" name="password" placeholder="password" className="form-control" onChange={handleChange} required />
+            {errors.password && <small className="text-danger">{errors.password}</small>}
           </div>
           <div className="mt-3">
             <input type="tel" name="mobile" placeholder="Mobile Number" className="form-control" pattern="[0-9]*" maxLength="10" onInput={(e) => (e.target.value = e.target.value.replace(/\D/g, ""))} onChange={handleChange} required />
@@ -175,14 +211,14 @@ export default function SignupForm() {
               <input type="text" name="district" placeholder="District" className="form-control" onChange={handleChange} required />
             </div>
             <div className="col-md-6">
-            <select name="state" className="form-select bg-white text-dark" onChange={handleChange} required>
-  <option value="">Select State</option>
-  {states.map((item, index) => (
-    <option key={index} value={item.state}>
-      {item.state}
-    </option>
-  ))}
-</select>
+              <select name="state" className="form-select bg-white text-dark" onChange={handleChange} required>
+                <option value="">Select State</option>
+                {states.map((item, index) => (
+                  <option key={index} value={item.state}>
+                    {item.state}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="mt-3">
@@ -190,7 +226,24 @@ export default function SignupForm() {
             {errors.pincode && <small className="text-danger">{errors.pincode}</small>}
           </div>
           <div className="mt-3">
-            <input type="text" name="trades" placeholder="Trades" className="form-control" onChange={handleChange} required />
+            <label className="form-label">Select Trades</label>
+            <div className="d-flex flex-wrap">
+              {tradesList.map((trade) => (
+                <div key={trade.id} className="form-check me-3">
+                  <input
+                    type="checkbox"
+                    id={`trade-${trade.id}`}
+                    className="form-check-input"
+                    value={trade.id}
+                    checked={formData.trades.includes(trade.id)}
+                    onChange={(e) => handleTradeChange(trade.id, e.target.checked)}
+                  />
+                  <label htmlFor={`trade-${trade.id}`} className="form-check-label">
+                    {trade.name}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="mt-3">
             <input type="number" name="rate_per_day" placeholder="Rate per Day" className="form-control" onChange={handleChange} required />

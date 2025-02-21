@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import "../../css/login.css";
+import axios from "axios";
 
+/*
+Component to handle user login by password
+*/
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,6 +28,7 @@ export default function LoginPage() {
 
       if (res.status === 200) {
         console.log("Login successful:", res.data);
+        router.push("/");
       }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);

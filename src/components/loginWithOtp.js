@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import "../../css/login.css";
 import axios from "axios";
 
+/*
+Component to handle user login by OTP
+*/
 export default function OTPLoginPage() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -12,6 +16,7 @@ export default function OTPLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const router = useRouter();
   const handleSendOTP = async () => {
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
       setError("Enter a valid email.");
@@ -44,6 +49,7 @@ export default function OTPLoginPage() {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-otp`, { email, otp });
       console.log("OTP Verified", response.data);
       setLoading(false);
+      router.push("/");
     } catch (err) {
       setError("Invalid OTP. Try again.");
       setLoading(false);

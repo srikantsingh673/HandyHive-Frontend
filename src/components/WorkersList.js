@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+/*
+Component to display a list of available workers
+*/
 export default function WorkersList() {
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
