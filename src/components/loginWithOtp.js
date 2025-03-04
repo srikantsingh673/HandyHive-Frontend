@@ -26,7 +26,7 @@ export default function OTPLoginPage() {
     try {
       setLoading(true);
       setError("");
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/send-otp`, { email });
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/send-otp`, { email }, { withCredentials: true });
       setOtpSent(true);
       setLoading(false);
       console.log("OTP sent to:", email);

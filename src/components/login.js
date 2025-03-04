@@ -19,11 +19,12 @@ export default function LoginPage() {
 
     try {
       const res = await axios.post(`${process.env.API_BASE_URL}/account/verify-password/`, 
-      { email, password }, 
+      { email, password },  { withCredentials: true },
       {
         headers: {
           "Content-Type": "application/json",
         },
+       
       });
 
       if (res.status === 200) {
