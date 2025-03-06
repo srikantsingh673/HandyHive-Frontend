@@ -46,7 +46,7 @@ export default function OTPLoginPage() {
     try {
       setLoading(true);
       setError("");
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-otp`, { email, otp });
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/verify-otp`, { email, otp }, { withCredentials: true });
       console.log("OTP Verified", response.data);
       setLoading(false);
       router.push("/");
