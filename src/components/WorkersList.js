@@ -12,7 +12,7 @@ export default function WorkersList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`${process.env.API_BASE_URL}/account/workers/`)
+    axios.get(`${process.env.API_BASE_URL}/account/partners/`)
       .then((response) => {
         setWorkers(response.data.data);
         setLoading(false);
@@ -39,9 +39,6 @@ export default function WorkersList() {
                 </h5>
                 <p className="card-text mb-1">
                   <strong>Location:</strong> {worker.location}, {worker.state}
-                </p>
-                <p className="card-text mb-1">
-                  <strong>Phone:</strong> {worker.mobile}
                 </p>
                 <p className="card-text mb-1">
                   <strong>Rate per day:</strong> ₹{worker.rate_per_day}
