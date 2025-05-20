@@ -16,7 +16,10 @@ export default function Navbar() {
     // Check if refreshToken & accessToken exist in cookies
     const refreshToken = Cookies.get("refreshToken");
     const accessToken = Cookies.get("accessToken");
-console.log(Cookies , " ", isAuthenticated);
+
+console.log("Access Token:", accessToken);
+  console.log("Is Authenticated:", !!refreshToken && !!accessToken);
+  
     setIsAuthenticated(!!refreshToken && !!accessToken); // Set true if both exist
   }, []);
 
@@ -69,11 +72,11 @@ console.log(Cookies , " ", isAuthenticated);
               </>
             ) : (
               <>
-                <li className="nav-item account">
+                <li className="nav-item profile">
                   <a
                     className="nav-link active"
                     aria-current="page"
-                    href="/signup"
+                    href="/profile"
                   >
                     Acc
                   </a>

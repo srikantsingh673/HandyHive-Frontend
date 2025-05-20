@@ -27,9 +27,9 @@ export default function LoginPage() {
         },
        
       });
-
-      if (res.status === 200) {
-        console.log("Login successful:", res.data);
+console.log(res)
+      if (res?.status === 200) {
+        console.log("Login successful:", res?.data);
         router.push("/");
       }
     } catch (error) {
