@@ -19,7 +19,7 @@ export default function Navbar() {
 
 console.log("Access Token:", accessToken);
   console.log("Is Authenticated:", !!refreshToken && !!accessToken);
-  
+
     setIsAuthenticated(!!refreshToken && !!accessToken); // Set true if both exist
   }, []);
 
@@ -78,7 +78,7 @@ console.log("Access Token:", accessToken);
                     aria-current="page"
                     href="/profile"
                   >
-                    Acc
+                    Profile
                   </a>
                 </li>
                 <li className="nav-item logout">
