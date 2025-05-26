@@ -18,19 +18,31 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${process.env.API_BASE_URL}/account/verify-password/`, 
-      { email, password },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-       
-      });
-console.log(res)
+      const res = await axios.post(
+        `${process.env.API_BASE_URL}/account/verify-password/`,
+        { email, password },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res);
       if (res?.status === 200) {
-        console.log("Login successful:", res?.data);
-        router.push("/");
+        const profileRes = await axios.post(
+          `${process.env.API_BASE_URL}/account/profile/`,
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Profile:", profileRes);
+        // router.push("/");
       }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
@@ -39,10 +51,16 @@ console.log(res)
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light px-3">
-      <div className="card shadow-lg p-4" style={{ maxWidth: "400px", width: "100%" }}>
+      <div
+        className="card shadow-lg p-4"
+        style={{ maxWidth: "400px", width: "100%" }}
+      >
         <h2 className="text-center mb-4">Login</h2>
         <p className="text-end text-muted">
-          <a href="/signinWithOtp" className="text-warning text-decoration-none">
+          <a
+            href="/signinWithOtp"
+            className="text-warning text-decoration-none"
+          >
             Login with OTP
           </a>
         </p>
@@ -50,36 +68,43 @@ console.log(res)
         <form onSubmit={handleSubmit} className="mt-3">
           <div className="mb-3">
             <label className="form-label">Email</label>
-            <input 
-              type="email" 
-              className="form-control" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              placeholder="Enter Email Address" 
-              required 
+            <input
+              type="email"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter Email Address"
+              required
             />
           </div>
 
           <div className="mb-3">
             <label className="form-label">Password</label>
-            <input 
-              type="password" 
-              className="form-control" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              placeholder="Enter your password" 
-              required 
+            <input
+              type="password"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
             />
           </div>
 
-          <button type="submit" className="btn btn-warning w-100">ENTER</button>
+          <button type="submit" className="btn btn-warning w-100">
+            ENTER
+          </button>
         </form>
 
         <div className="mt-3 text-center">
-          <a href="#" className="text-warning text-decoration-none">Forgot password?</a>
+          <a href="#" className="text-warning text-decoration-none">
+            Forgot password?
+          </a>
         </div>
         <div className="mt-2 text-center text-muted">
-          Don't have an account? <a href="/signup" className="text-warning text-decoration-none">Sign up.</a>
+          Don't have an account?{" "}
+          <a href="/signup" className="text-warning text-decoration-none">
+            Sign up.
+          </a>
         </div>
       </div>
     </div>
