@@ -19,30 +19,15 @@ export default function LoginPage() {
 
     try {
       const res = await axios.post(
-        `${process.env.API_BASE_URL}/account/verify-password/`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/account/verify-password/`,
         { email, password },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { withCredentials: true }
       );
-      console.log(res);
-      if (res?.status === 200) {
-        const profileRes = await axios.post(
-          `${process.env.API_BASE_URL}/account/profile/`,
-          {},
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        console.log("Profile:", profileRes);
-        // router.push("/");
+      if (res.status === 200) {
+        // Login successful, redirect to the home page
+        router.push("/profile");
+      } else {
+        console.error("Login failed:", res.data);
       }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);

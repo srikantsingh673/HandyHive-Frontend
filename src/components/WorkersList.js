@@ -23,7 +23,7 @@ export default function WorkersList() {
     setIsAuthenticated(!!refreshToken && !!accessToken);
 
     axios
-      .get(`${process.env.API_BASE_URL}/account/partners/`)
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/account/partners/`)
       .then((response) => {
         setWorkers(response.data.data);
         setLoading(false);
