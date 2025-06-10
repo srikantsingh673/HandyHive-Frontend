@@ -4,25 +4,33 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 /*
 Component to display the top navbar
 */
 export default function Navbar() {
+  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [partnerId, setPartnerId] = useState("");
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
 
-    // Check if refreshToken & accessToken exist in cookies
-    const refreshToken = Cookies.get("refreshToken");
-    const accessToken = Cookies.get("accessToken");
+    const loadUserFromStorage = () => {
+      const storedFirstName = localStorage.getItem("first_name");
+      const storedEmail = localStorage.getItem("email");
+      const storedPartnerId = localStorage.getItem("partner_id");
 
-console.log("Access Token:", accessToken);
-  console.log("Is Authenticated:", !!refreshToken && !!accessToken);
-
-    setIsAuthenticated(!!refreshToken && !!accessToken); // Set true if both exist
+      setFirstName(storedFirstName || "");
+      setEmail(storedEmail || "");
+      setPartnerId(storedPartnerId || "");
+      setIsAuthenticated(!!storedFirstName && !!storedEmail);
+    };
+    loadUserFromStorage();
+    window.addEventListener("profileUpdated", loadUserFromStorage);
   }, []);
-
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -78,17 +86,22 @@ console.log("Access Token:", accessToken);
                     aria-current="page"
                     href="/profile"
                   >
-                    Profile
+                    Hi {firstName}
                   </a>
                 </li>
                 <li className="nav-item logout">
                   <a
                     className="nav-link active"
                     aria-current="page"
-                    href="#" onClick={() => {
-                        Cookies.remove('accessToken');
-                        Cookies.remove('refreshToken');
-                        setIsAuthenticated(false);
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      localStorage.clear();
+                      setIsAuthenticated(false);
+                      setFirstName("");
+                      setEmail("");
+                      setPartnerId("");
+                      router.push("/signin");
                     }}
                   >
                     Logout

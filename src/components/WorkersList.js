@@ -12,20 +12,17 @@ export default function WorkersList() {
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [visibleContact, setVisibleContact] = useState(null); // stores worker_id
-
+  const [firstName, setFirstName] = useState();
   useEffect(() => {
-    const refreshToken = Cookies.get("refreshToken");
-    const accessToken = Cookies.get("accessToken");
-
-  console.log("Access Token:", accessToken);
-  console.log("Refresh Token:", refreshToken);
-  console.log(!!refreshToken && !!accessToken)
-    setIsAuthenticated(!!refreshToken && !!accessToken);
+    const storedFirstName = localStorage.getItem("first_name");
+    setFirstName(storedFirstName || "");
+    setIsAuthenticated(!!storedFirstName);
 
     axios
       .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/account/partners/`)
       .then((response) => {
         setWorkers(response.data.data);
+        console.log(response.data.data)
         setLoading(false);
       })
       .catch((error) => {
